@@ -1,71 +1,50 @@
-// (опционально) package your.package;
+import java.util.Arrays;
 
 public class JuiceMachine {
-    private final String name;
-    private final int[] stock = new int[Fruit.values().length]; // остатки по фруктам
-
-    public JuiceMachine(String name) {
-        this.name = name;
-    }
-
-    // Универсальное добавление любого фрукта с уведомлением о недобавленном остатке
-    public void add(Fruit f, int amount) {
-        int idx = f.ordinal();
-        int before = stock[idx];
-        stock[idx] = Math.min(stock[idx] + amount, f.max);
-        int added = stock[idx] - before;
-        if (added < amount) {
-            System.out.println("Вместо " + amount + " " + f.ruNameGenitive
-                    + " добавлено только " + added + " (лимит " + f.max + ")");
-        }
-    }
-
-    // Приготовление по рецепту: проверка -> вывод процесса -> списание
-    public void makeJuice(JuiceRecipe recipe) {
-        // Проверка наличия
-        for (Fruit f : Fruit.values()) {
-            int need = recipe.needOf(f);
-            if (stock[f.ordinal()] < need) {
-                System.out.println("Недостаточно: добавьте " + f.ruNameGenitive + "!");
-                return;
-            }
-        }
-
-        // Процесс приготовления (демо-лог)
-        System.out.println("Готовлю сок \"" + recipe.getName() + "\":");
-        for (Fruit f : Fruit.values()) {
-            int n = recipe.needOf(f);
-            if (n > 0) {
-                System.out.println("Обрабатываю " + n + " " + f.ruNameGenitive + "...");
-            }
-        }
-
-        // Списание остатков
-        for (Fruit f : Fruit.values()) {
-            stock[f.ordinal()] -= recipe.needOf(f);
-        }
-        System.out.println("Сок готов!");
+    private final String machineName;
+    private int[] stock = new int[Fruit.values().length];
+    public JuiceMachine(String name){
+        this.machineName = name;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("В машине: ");
+        String machineStorage = " В машине " + machineName + " ";
         Fruit[] fs = Fruit.values();
-        for (int i = 0; i < fs.length; i++) {
-            if (i > 0) sb.append(", ");
-            sb.append(stock[i]).append(" ").append(fs[i].ruNameGenitive);
+        for(int i=0; i< fs.length; i++){
+            machineStorage += (stock[i] + " " + fs[i].ruName + ", ");
         }
-        return sb.toString();
+        return machineStorage;
     }
 
-    // (опционально) Английская версия строки состояния
     public String toStringEn() {
-        StringBuilder sb = new StringBuilder("In the machine: ");
+        String machineStorage = " In the storage of  " + machineName + " ";
         Fruit[] fs = Fruit.values();
-        for (int i = 0; i < fs.length; i++) {
-            if (i > 0) sb.append(", ");
-            sb.append(stock[i]).append(" ").append(fs[i].enNamePlural);
+        for(int i=0; i< fs.length; i++){
+            machineStorage += (stock[i] + " " + fs[i].engName + ", ");
         }
-        return sb.toString();
+        return machineStorage;
+    }
+    public void add(Fruit f, int amount){
+        int id = f.ordinal();
+        int before = stock[id];
+        stock[id] = Math.min(before + amount, f.max);
+        int added = stock[id] - before;
+        if(added < amount){
+            System.out.println(" Вместо " + amount + " "+ f.ruName + " добавлено " + added);
+        }
     }
 }
+
+//
+//
+
+//
+//Implement methods:
+//
+
+//Implement a method "make juice":
+//If there are enough resources, the machine "makes juice"
+//        (prints something like: "Chopping 2 oranges, adding 1 banana... Juice ready!").
+//After making juice, the resources should be decreased.
+//If there are not enough resources — print exactly what needs to be added.
