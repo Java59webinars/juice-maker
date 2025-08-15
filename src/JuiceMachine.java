@@ -1,4 +1,4 @@
-import java.util.Arrays;
+
 
 public class JuiceMachine {
     private final String machineName;
@@ -34,17 +34,36 @@ public class JuiceMachine {
             System.out.println(" Вместо " + amount + " "+ f.ruName + " добавлено " + added);
         }
     }
+
+    public void makeJuice(JuiceRecipe recipe){
+        System.out.println("Готовлю сок: " + recipe.getRecipeName());
+        if (!checkFruitQuantity(recipe)) return;
+        for (Fruit f: Fruit.values()){
+            int i=f.ordinal();
+            int fruitInRecipe = recipe.getAllFruitInRecipe()[i];
+            if(fruitInRecipe > 0){
+                System.out.println(" Обрабатываем " + fruitInRecipe + " " + f.ruName);
+                stock[i] -= fruitInRecipe;
+            }
+        }
+        System.out.println("Сок готов, приятного аппетита!");
+    }
+
+    private boolean checkFruitQuantity(JuiceRecipe recipe) {
+        boolean fruitOk = true;
+        for(Fruit f: Fruit.values()){
+            int i=f.ordinal();
+            if(stock[i]< recipe.getAllFruitInRecipe()[i]){
+                System.out.println("Недостаточно: " + f.ruName + "  добавьте "  + (recipe.getAllFruitInRecipe()[i]-stock[i]) +  " штук") ;
+                fruitOk = false;
+            }
+        }
+        return fruitOk;
+    }
 }
 
-//
-//
 
-//
-//Implement methods:
-//
 
-//Implement a method "make juice":
-//If there are enough resources, the machine "makes juice"
-//        (prints something like: "Chopping 2 oranges, adding 1 banana... Juice ready!").
-//After making juice, the resources should be decreased.
-//If there are not enough resources — print exactly what needs to be added.
+
+
+
